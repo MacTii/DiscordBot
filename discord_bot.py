@@ -1,5 +1,6 @@
 import discord, os, requests
 from dotenv import load_dotenv
+from names_dataset import NameDataset
 
 # Load .env in same directory
 load_dotenv()
@@ -7,16 +8,12 @@ load_dotenv()
 # Initialize bot
 client = discord.Client()
 
-# Name to get country info
-names = ["mateusz", "nathaniel", "kacper"]
+# Database of names
+nd = NameDataset()
 
 def get_country_info(name):
-
-    #name = "Mateusz"
     response = requests.get("https://api.nationalize.io?name=%s" % (name))
-
     country = response.json()["country"][0]["country_id"]
-    #country_info = countries[0]["country_id"]
     return country
 
 # Message that bot is running
@@ -30,11 +27,11 @@ async def on_message(message):
     if message.author == client.user:
         return
     
-    # Message content
+    # Message content case sensitive
     msg = message.content.casefold()
     
     # Bot message
-    if msg[0] == '$' and any(word in msg for word in names):
+    if msg[0] == '$' and nd.search(msg[1:]):
         await message.channel.send(get_country_info(msg[1:]))
 
 # Bot run
