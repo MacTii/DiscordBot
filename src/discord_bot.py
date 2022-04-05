@@ -25,22 +25,34 @@ def get_country_info(name):
 # Message that bot is running
 @client.event
 async def on_ready():
-    print('Bot is running as {0.user}'.format(client))
+    channel = client.get_channel(int(os.getenv('CHANNEL_ID')))
+    await channel.send("Bot is online ...")
+    print('Bot is running as {0.user} ...'.format(client))
 
 # Bot event handler to messages
 @client.event
 async def on_message(message):
-    if message.author == client.user:
-        return
-    
-    # Message content case sensitive
-    msg = message.content.casefold()
-    
-    # Bot message
-    if msg[0] == '$' and nd.search(msg[1:]):
-        info = get_country_info(msg[1:])
-        if info is not None:
-            await message.channel.send(info)
+    try:
+        if message.author == client.user:
+            return
+        
+        # Message content case sensitive
+        msg = message.content.casefold()
+        
+        # Command to close discord bot
+        if msg.startswith('$exit'):
+            await message.channel.send('Bot is offline.')
+            await client.close()
+        
+        # Bot message
+        if msg[0] == '$' and nd.search(msg[1:]):
+            # Get value from function
+            info = get_country_info(msg[1:])
+            # Check if function returns something
+            if info is not None:
+                await message.channel.send(info)
+    except RuntimeError:
+        print("An exception occurred")
 
 # Bot run
 client.run(os.getenv('TOKEN'))
