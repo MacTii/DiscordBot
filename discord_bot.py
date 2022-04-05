@@ -31,7 +31,7 @@ async def on_message(message):
         return
     
     # Message content
-    msg = message.content
+    msg = message.content.casefold()
     
     # Bot message
     if msg[0] == '$' and any(word in msg for word in names):
