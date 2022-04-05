@@ -26,8 +26,8 @@ def get_country_info(name):
 @client.event
 async def on_ready():
     channel = client.get_channel(int(os.getenv('CHANNEL_ID')))
-    await channel.send("Bot is online ...")
-    print('Bot is running as {0.user} ...'.format(client))
+    await channel.send("Bot is online...")
+    print('Bot is running as {0.user}...'.format(client))
 
 # Bot event handler to messages
 @client.event
