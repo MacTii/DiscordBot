@@ -13,8 +13,14 @@ nd = NameDataset()
 
 def get_country_info(name):
     response = requests.get("https://api.nationalize.io?name=%s" % (name))
+
+    if not response.json()["country"]:
+        return
+
     country = response.json()["country"][0]["country_id"]
-    return country
+
+    flag = ":flag_%s:" % (country.casefold())
+    return flag
 
 # Message that bot is running
 @client.event
