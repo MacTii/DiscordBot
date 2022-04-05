@@ -15,7 +15,7 @@ def get_country_info(name):
     response = requests.get("https://api.nationalize.io?name=%s" % (name))
 
     if not response.json()["country"]:
-        return
+        return None
 
     country = response.json()["country"][0]["country_id"]
 
@@ -38,7 +38,9 @@ async def on_message(message):
     
     # Bot message
     if msg[0] == '$' and nd.search(msg[1:]):
-        await message.channel.send(get_country_info(msg[1:]))
+        info = get_country_info(msg[1:])
+        if info is not None:
+            await message.channel.send(info)
 
 # Bot run
 client.run(os.getenv('TOKEN'))
