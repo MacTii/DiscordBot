@@ -19,7 +19,7 @@ def get_country_info(name):
 
     country = response.json()["country"][0]["country_id"]
 
-    flag = ":flag_%s:" % (country.casefold())
+    flag = ":flag_%s:" % (country.lower())
     return flag
 
 # Message that bot is running
